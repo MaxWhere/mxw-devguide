@@ -1,0 +1,16 @@
+{
+  "main": "index.jsx"
+
+  , "environment": {
+    "background": { "r": 0.980392, "g": 0.980392, "b": 1, "a": 0.980392 }
+    , "ambient": { "r": 0.1, "g": 0.1, "b": 0.1, "a": 1 }
+    , "sky-box": { "material": "Glass-Room_Sky" }
+  }
+  
+  , "camera": {
+    "position": { "x": -856, "y": 803, "z": 1699 }
+    , "orientation": { "w": 0.8855457305908203, "x": -0.10893524438142776, "y": -0.44826802611351013, "z": -0.05514373257756233 }
+  }
+
+  , "local": "./resources"
+}
