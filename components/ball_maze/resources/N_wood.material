@@ -1,0 +1,82 @@
+
+material N_wood
+{
+	technique glsl
+	{
+		pass mxw_pbs
+		{
+
+			vertex_program_ref physicallybased_vp
+			{
+				param_named texture_offset float2 0.43 0.43
+				param_named texture_offset_metallic float2 0.43 0.43
+				param_named texture_offset_normal float2 0.43 0.43
+				param_named texture_offset_roughness float2 0.43 0.43
+				param_named tile_count float 2.34
+				param_named tile_count_metallic float 2.34
+				param_named tile_count_normal float 2.34
+				param_named tile_count_roughness float 2.34
+			}
+
+			fragment_program_ref physicallybased_fp
+			{
+				param_named refl_blur_bias float 0.75
+				param_named roughness_bias float -0.5
+				param_named surface_reflectivity float2 3 1
+			}
+
+			texture_unit diffuse_map
+			{
+				texture_alias diffuse_map
+				texture wood_basecolor.png
+				max_anisotropy 8
+			}
+
+			texture_unit normal_map
+			{
+				texture_alias normal_map
+				texture wood_normal.png
+				max_anisotropy 8
+			}
+
+			texture_unit roughness_map
+			{
+				texture_alias roughness_map
+				texture wood_roughness.png
+				max_anisotropy 8
+			}
+
+			texture_unit metallic_map
+			{
+				texture_alias metallic_map
+				texture wood_metallic.png
+				max_anisotropy 8
+			}
+
+			texture_unit reflection_map
+			{
+				texture_alias reflection_map
+				cubic_texture NiagaraFalls3.dds combinedUVW
+				max_anisotropy 8
+				tex_address_mode clamp
+				env_map cubic_reflection
+			}
+
+			texture_unit light_map
+			{
+				texture_alias light_map
+				texture tiny_white.png
+				max_anisotropy 8
+			}
+
+			texture_unit ambientocclusion_map
+			{
+				texture_alias ambientocclusion_map
+				texture tiny_white.png
+				max_anisotropy 8
+			}
+		}
+
+	}
+
+}

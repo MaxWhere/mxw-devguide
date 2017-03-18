@@ -1,0 +1,31 @@
+{
+  "name": "mxw-boilerplate",
+  "version": "1.0.0",
+  "description": "Starting point for learning MAXWHER app development",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ABC-iRobotics/mxw-boilerplate.git"
+  },
+  "keywords": [
+    "maxwhere",
+    "whapp",
+    "vr"
+  ],
+  "author": "Peter Galambos (MISTEMS Ltd.)",
+  "license": "",
+  "bugs": {
+    "url": "https://github.com/ABC-iRobotics/mxw-boilerplate/issues"
+  },
+  "homepage": "https://github.com/ABC-iRobotics/mxw-boilerplate#readme",
+  "dependencies": {
+    "lodash": "latest",
+    "three": "latest"
+  }
+}

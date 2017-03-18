@@ -11,8 +11,8 @@ wom.setConfig({
   navigation: 'coginav-lite',
   show: false
 })
-  wom.load(path.join(scenePath, 'where.json')).once('ready', () => {
+wom.installComponent(require('./components/ball_maze'), 'maze')
+wom.load(path.join(scenePath, 'where.json')).once('ready', () => {
   wom.showWindow()
-   
- })
+})
 wom.on('quit', app.quit)
