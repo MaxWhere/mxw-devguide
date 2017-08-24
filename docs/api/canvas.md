@@ -1,143 +1,114 @@
 # Canvas
 
-> Present a plane in the 3D space where arbitrary bitmap data can be rendered.
+> 2d plane which can have any bitmap content as texture to render.
 
-`Canvas` is a [`Node`](node.md).
+`Canvas` is subclass of [`Node`](node.md). It adds `'canvas'` type entity to `Node` base class and provides accessor and manipulator functions for a canvas as extension. `'canvas'` type entities are either 2d planes in the 3d scene or overlay planes on native window. The rendered bitmap can be adjusted in `Canvas`. `Webview` is extending this class with the capability of rendering Chromium webview in `Canvas`'s bitmap.
 
 ## `new Canvas([options])`
+To create and insert `Canvas` into `wom` tree use `wom.create('canvas', [options])`!
+* `options` Object (optional)
+  * `location` String (optional) - The location of `Canvas`. Can be rendered into the 3d scene (`in-game`) or on the overlay of native window (`overlay`) in front of every scene object. Possible values are: `in-game` (default), `overlay`.
+  * `width` Number (optional) - The width of `Canvas` in Ogre units (`in-game`) or pixels (`overlay`). Default is `1280`.
+  * `height` Number (optional) - The height of `Canvas` in Ogre units (`in-game`) or pixels (`overlay`). Default is `720`.
+  * `resolution-width` Number (optional) - The resolution width of the `Canvas`'s texture in pixels (Integer). Default is `1280`.
+  * `resolution-height` Number (optional) - The resolution height of the `Canvas`'s texture in pixels (Integer). Default is `720`.
+  * `transparent` Boolean (optional) - Whether the `Canvas` is transparent. _Alpha channel of texture's pixel color is used for transparency values._ Default is `true`.
+  * `zOrder` Number (optional) - Z order of `overlay` type `Canvas` (Integer). _Overlay with greater Z order covers overlays with less Z order._ Default is `0`.
+  * `metrics` String (optional) - Determines the metrics used for `left` and `top` for `overlay` type `Canvas`. Possible values are `pixels` (default), `relative`
+  * `left` Number (optional) - In `overlay` location the offset from the left of the window. Default is `0`.
+  * `top` Number (optional) - In `overlay` location the offset from the top of the window. Default is `0`.
+  * `horizontal-align` String (optional) - Determines how to align the `overlay` type `Canvas` horizontally. _`left`'s `0` point depends on this alignment._ Possible values are `left` (default), `center`, `right`.
+  * `vertical-align` String (optional) - Determines how to align the `overlay` type `Canvas` vertically. _`top`'s `0` point depends on this alignment._ Possible values are `top` (default), `center`, `bottom`
+  * `disableIngamePhysical` Boolean (optional) - Determines whether `Canvas` registers `canvas` type physical shape matching `Canvas`'s dimensions when created. If `true` physical shape is not registered. Default is `false`
 
-- `options` Object (optional)
-  - `location` String (optional) - The canvas's location. Default is `in-game`.
-    Possible values are:
-    - `in-game` - Rendered in to the 3D space
-    - `overlay` - Rendered on the overlay, in front of everything.
-  - `width` Integer (optional) - The width of the canvas. Default is `1280`.
-  - `height` Integer (optional) - The height of the canvas. Default is `720`.
-  - `resolution-width` Integer (optional) - The resolution width of the texture
-    of the canvas. Default is `1280`.
-  - `resolution-height` Integer (optional) - The resolution height of the
-    texture of the canvas. Default is `720`.
-  - `transparent` Boolean (optional) - Wether the canvas to be transparent.
-    Default is `true`.
-  - `zOrder` Integer (optional) - In `overlay` location the Z order of the
-    canvases. Default is `0`.
-  - `metrics` String (optional) - Determines the metrics used for `left` and
-    `top` in `overlay` location. Default is `pixels`. Possible values are:
-    - `pixels`
-    - `relative`
-  - `left` Integer (optional) - In `overlay` location the offset from the left
-    of the window. Default is `0`.
-  - `top` Integer (optional) - In `overlay` location the offset from the top of
-    the window. Default is `0`.
-  - `horizontal-align` String (optional) - How to align the canvas in `overlay`
-    location horizontally. Default is `left`. Possible values are:
-    - `left`
-    - `center`
-    - `right`
-  - `vertical-align` String (optional) - How to align the canvas in `overlay`
-    location vertically. Default is `top`. Possible values are:
-    - `top`
-    - `center`
-    - `bottom`
+_`options` are superset of `Node` constructor's options! Only `Canvas` specific properties are listed here. For the rest see `new Node([options])` documentation_
+
+```js
+Example
+```
+
+## Instance Events
+See `Node` instance events for inherited events.
 
 ## Instance Properties
+See `Node` instance properties for inherited properties.
 
-### `Canvas.props.location`
+#### `Canvas.props.location`
+A String - The location of `Canvas`.
 
-The canvas's location.
+#### `Canvas.props['resolution-width']`
+A Number - The resolution width of the `Canvas`'s texture in pixels.
 
-### `Canvas.props.width`
+#### `Canvas.props['resolution-height']`
+A Number - The resolution height of the `Canvas`'s texture in pixels.
 
-The width of the canvas.
+#### `Canvas.props.transparent`
+A Boolean - Shows whether the `Canvas` is transparent.
 
-### `Canvas.props.height`
+#### `Canvas.props.zOrder`
+A Number - Z order of `overlay` type `Canvas`.
 
-The height of the canvas.
+#### `Canvas.props.metrics`
+A String - Determines the metrics used for `left` and `top` for `overlay` type `Canvas`.
 
-### `Canvas.props.resolution-width`
+#### `Canvas.props['horizontal-align']`
+A String - Determines how to align the `overlay` type `Canvas` horizontally.
 
-The resolution width of the texture of the canvas.
-
-### `Canvas.props.resolution-height`
-
-The resolution height of the texture of the canvas.
-
-### `Canvas.props.transparent`
-
-Wether the canvas to be transparent.
-
-### `Canvas.props.zOrder`
-
-In `overlay` location the Z order of the canvases.
-
-### `Canvas.props.metrics`
-
-Determines the metrics used for `left` and `top` in `overlay` location.
-
-### `Canvas.props.left`
-
-In `overlay` location the offset from the left of the window.
-
-### `Canvas.props.top`
-
-In `overlay` location the offset from the top of the window.
-
-### `Canvas.props.horizontal-align`
-
-How to align the canvas in `overlay` location horizontally.
-
-### `Canvas.props.vertical-align`
-
-How to align the canvas in `overlay` location vertically.
+#### `Canvas.props['vertical-align']`
+A String - Determines how to align the `overlay` type `Canvas` vertically.
 
 ## Instance Methods
+See `Node` instance methods for inherited methods.
 
-### `Canvas.setSize(width, height)`
+If the return value is not specified the method returns this `Canvas` instance.
 
-- `width` Integer
-- `height` Integer
+#### `Canvas.getSize()`
+Returns Object {width, height} - The size of `Canvas` in Ogre units (`in-game`) or pixels (`overlay`)
 
-Sets the given `width` and `height` for the canvas. In 3D space units.
+#### `Canvas.setSize(width, height)`
+Sets the size of `Canvas`
+* `width` Number - The width of `Canvas` in Ogre units (`in-game`) or pixels (`overlay`) to set.
+* `height` Number - The height of `Canvas` in Ogre units (`in-game`) or pixels (`overlay`) to set.
 
-### `Canvas.setResolution(width, height)`
+#### `Canvas.setResolution(width, height)`
+Sets the resolution of `Canvas`'s texture.
+* `width` Number - The resolution width of the `Canvas`'s texture in pixels (Integer) to set.
+* `height` Number - The resolution height of the `Canvas`'s texture in pixels (Integer) to set.
 
-- `width` Integer
-- `height` Integer
+#### `Canvas.getOffset()`
+Returns Object {top, left} - The offset of left upper corner of `overlay` type `Canvas` from the display position origin (depends on alignment).
 
-Sets the given `width` and `height` for the resolution of the canvas, in pixels.
+_Only for `overlay` type `Canvas`_
 
-### `Canvas.setOffset(left, top)`
+#### `Canvas.setOffset(left, top)`
+Move the left upper corner of `overlay` type `Canvas` on the display. Unit depends on metrics and position origin depends on alignments.
+* `left` Number - Left position of `Canvas`
+* `top` Number - Top position of `Canvas`
 
-- `left` Integer
-- `top` Integer
+_Applied only for `overlay` type `Canvas`_
 
-In `overlay` location the offset from the left and top of the window.
+#### `Canvas.setZOrder(order)`
+Sets the Z order of `overlay` type `Canvas`.
+* `order` Number - Z order to set (Integer).
 
+_Applied only for `overlay` type `Canvas`_
 
-### `Canvas.setZOrder(order)`
+#### `Canvas.setLocation(location)`
+Sets the location type of `Canvas`. Moves `Canvas` between display overlay and 3d scene
+* `location` String - Location type to set. Possible values are `in-game`, `overlay`.
 
-- `order` Integer
+#### `Canvas.loadPicture(path)`
+Loads the specified picture into texture of `Canvas`.
+* `path` String - Path to image file to render.
 
-In `overlay` location the ordering of the windows along the Z axis.
+#### `Canvas.setPassive(passive)`
+Sets the `overlay` type `Canvas` passive or active. _Passive overlay is not participating in mouse ray query, thus doesn't recieve mouse inputs. Therefore, 3d scene behind a passive overlay can interact with mouse, which is not possible otherwise._
+* `passive` Boolean - Enable passive mode
 
-### `Canvas.setLocation(location)`
+_Applied only for `overlay` type `Canvas`_
 
-- `location` String - Possible values are: `in-game`, `overlay`.
-
-Sets the canvas's location to be in 3D space or on the window.
-
-### `Canvas.setBuffer(damageRect, buffer, bufferSize)`
-
-- `damageRect` Object, `{x, y, width, height}` - The area where to set the
-  buffer data.
-- `buffer` Buffer - Bitmap data.
-- `bufferSize` Integer - The size of `buffer`
-
-`buffer` holds a 32 bit ARGB data that will be rendered onto the canvas in area
-`damageRect`.
-
-### `Canvas.loadPicture(path)`
-
-- `path` String
-
-A picture located in `path` will be rendered onto the canvas.
+#### `Canvas.setBuffer(damageRect, buffer, bufferSize)`
+Sets the bitmap buffer of the underlying texture of `Canvas`.
+* `damageRect` Object - The area where the buffer data should be set {x, y, width, height}.
+* `buffer` Object - Bitmap to apply. A `node::Buffer` holding 32 bit ARGB data.
+* `bufferSize` Object - The size of `buffer` in pixels {width, height}.

@@ -1,82 +1,122 @@
 # Mesh
 
-> Present and animate meshes in 3D space.
+> Visual object in 3d scene. Appearance is described with mesh file.
 
-`Mesh` is a [`Node`](node.md).
+`Mesh` is subclass of [`Node`](node.md). It adds `'mesh'` type entity to `Node` base class and provides mesh accessor and manipulator functions as extension. `'mesh'` type entities are visible objects in the 3d scene and described by an Ogre `.mesh` file.
 
+<!--
+_Some of base `Node` properties have different meaning for `Mesh` objects, thus some inherited `Node` property is documented here as well._
+-->
 ## `new Mesh([options])`
+To create and insert `Mesh` into `wom` tree use `wom.create('mesh', [options])`!
+* `options` Object (optional)
+  * `url` String (required) - Path to an Ogre mesh file.
 
-- `options` Object (optional)
-  - `url` String (required) - Path to an OGRE mesh file.
+_`options` are superset of `Node` constructor's options! Only `Mesh` specific properties are listed here. For the rest see `new Node([options])` documentation_
+
+```js
+how to obtain an instance
+```
+
+## Instance Events
+See `Node` instance events for inherited events.
+
+#### `'ready'`
+Emitted when the `Mesh` is successfully loaded into 3d scene. _This event is used for `wom`'s `'ready'` event_
+
+#### `'created'`
+Additionally to `Node`'s `'created'` event it also means that the `Mesh` is successfully loaded into 3d scene. _For `Mesh` it's the same as `'ready'`_
+
+#### `'updated'`
+Emitted when the `Mesh` is updated in the 3d scene. Possible causes are: submesh list chenges.
 
 ## Instance Properties
+See `Node` instance properties for inherited properties.
 
-### `Mesh.url`
+#### `Mesh.url`
+A String that specifies the Ogre mesh file used by this `Mesh`. It's file path relative to available resource folders.
 
-A `String` that specifies an OGRE mesh file.
+#### `Mesh.created` (`Node.created`)
+A Boolean - Additionally to `Node.created` property it also shows that the `Mesh` is successfully loaded into 3d scene.
+
+#### `Mesh.done` (`Node.done`)
+A Function - Additionally to `Node.done` property it is getting called only when the `Mesh` is successfully loaded into 3d scene.
 
 ## Instance Methods
+See `Node` instance methods for inherited methods.
 
-### `Mesh.setUrl(url)`
+If the return value is not specified the method returns this `Mesh` instance.
 
-- `url` String
+#### `Mesh.setUrl(url)`
+Sets the Ogre mesh file this `Mesh` will use in 3d scene.
+* `url` String - Path to mesh file relative to any resource folder.
 
-Changes the OGRE mesh file of the element.
+#### `Mesh.setMaterial(material[, subvisual])`
+Sets the material on the specified subvisual of the `Mesh`. _Mesh files can contain multiple sub-units for visualize 3d object. They are the 'subvisual's. They have different material applied._
+* `material` String - The name of material to apply. <!-- Can also feed MaterialWrap here, but it's messy -->
+* `subvisual` Number (optional) - The index of subvisual of `Mesh`. If no subvisual is given the material will be applied on every subvisual.
 
-### `Mesh.setMaterial(material[, subvisual])`
+#### `Mesh.subvisuals()`
+Returns Object[] - The array of subvisuals of this `Mesh`
+  * `material` Object <!-- TODO: It's MaterialWrap! Put it in wom.Material without explicit call of Mesh.material(Mesh.subvisual) -->
+  * `index` Number
 
-- `material` String or Material object
-- `subvisual` Integer (optional)
+#### `Mesh.subvisual(index)`
+* `index` Number - Index of subvisual of `Mesh` to get.
+Returns Object - The specified subvisual of this `Mesh`
+  * `material` Object <!-- TODO: It's MaterialWrap! Put it in wom.Material without explicit call of Mesh.material(Mesh.subvisual) -->
+  * `index` Number
 
-Sets the material on the specified subvisual. A subvisual can be referred by
-index number. The material to set can be defined either by name as String or as
-Material object. If no subvisual is given the material will be applied on every
-subvisual.
+#### `Mesh.material(subvisual)`
+* `subvisual` Object - Subvisual object to extract the material from.
+  * `material` Object <!-- TODO: It's MaterialWrap! Put it in wom.Material without explicit call of Mesh.material(Mesh.subvisual) -->
+  * `index` Number
+Returns Object - Extracted `Material` object of the specified subvisual Object. See `Material` documentation for object details.
 
-### `Mesh.subvisuals()`
+_Returned Objects of `subvisual` function can be passed here, and it returns the corresponding `Material` object_
 
-Returns the subvisuals for the mesh as an Object array.
+```js
+example for retrieving `Material` from `Mesh`
+```
 
-### `Mesh.subvisual(index)`
+#### `Mesh.animatorNames()`
+Returns String[] containing the available animations for the mesh file of `Mesh`. Animations can be controlled by passing the name to `Mesh.animator`
 
-- `index` Integer
+_Ogre mesh files can contain vertex or skeleton animations which can be accessed here_
 
-Returns the subvisual at a given index for the mesh as an Object.
+#### `Mesh.animator(name)`
+Extracts the specified mesh animation object from `Mesh`
+* `name` String - Name of the mesh animation to extract
+Returns an Object - Mesh animation object with controller methods
+  * `start` Function - Starts mesh animation playback from the current time position
+  * `pause` Function - Pauses mesh animation playback
+  * `stop` Function - Stops mesh animation playback and resets time position.
+  * `getName` Function - Returns the name of mesh animation as String.
+  * `getType` Function - Returns the type of mesh animation based on Ogre Animation categories. Possible values are `morph`, `pose`, `bone`. _Experimental_
+  * `getLength` Function - Returns the length of mesh animation in seconds as Number.
+  * `getTimePos` Function - Returns the current time position of mesh animation in seconds as Number.
+  * `getLoop` Function - Returns whether the mesh animation repeates as Boolean.
+  * `getWeight` Function - Returns the weight of each Poses or Bones in mesh animation as Number if any.
+  * `getEnabled` Function - Returns whether the mesh animation is enabled. _An animation is enabled if it's running (even if paused)_
+  * `setLength` Function - Pass `length` Number [seconds]. Sets the length of mesh animation.
+  * `setTimePos` Function - Pass `timepos` Number [seconds]. Sets the time position of mesh animation.
+  * `setLoop` Function - Pass `loop` Boolean. Sets whether the mesh animation should loop.
+  * `setWeight` Function - Pass `weight` Number. Sets the weight of mesh animation.
 
-### `Mesh.material(subvisual)`
+_Ogre mesh files can contain vertex or skeleton animations which can be accessed here_
 
-- `subvisual` Integer
+```js
+example using Ogre example mesh files
+```
 
-Returns a Material object for the given subvisual.
+#### `Mesh.save(path)`
+Saves this `Mesh` into a file.
+* `path` String - The path to file.
 
-### `Mesh.animatorNames()`
+_Any modification made to `Mesh` will be saved. Overwrites if file exists._
 
-Returns the available animations for the mesh as a String array.
+#### `Mesh.show()` (`Node.show()`)
+Shows the mesh in 3d scene.
 
-### `Mesh.animator(name)`
-
-- `name` String
-
-Returns an animator object of the given mesh for a specified animation.
-The animator object's methods:
-
-- `animator.start()`
-- `animator.pause()`
-- `animator.stop()`
-- `animator.getName()`
-- `animator.getType()`
-- `animator.getLength()`
-- `animator.getTimePos()`
-- `animator.getLoop()`
-- `animator.getWeight()`
-- `animator.getEnabled()`
-- `animator.setLength(value)`
-- `animator.setTimePos(value)`
-- `animator.setLoop(value)`
-- `animator.setWeight(value)`
-
-### `Mesh.save(path)`
-
-- `path` String
-
-Saves this mesh into a file.
+#### `Mesh.hide()` (`Node.hide()`)
+Hides the mesh in 3d scene.

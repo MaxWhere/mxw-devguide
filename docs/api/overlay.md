@@ -1,20 +1,25 @@
 # Overlay
 
-The `Overlay` class is a `Webview`, that can present a UI on the overlay.
+> Overlay type Webview object
 
-## Properties
+`Overlay` is subclass of [`Webview`](webview.md). It implements `Webview` rendered into the `overlay` of native display. Provides functions for special needs of `overlay` type `Webview`. It doesn't have any physical representation in 3d scene.
 
-## Methods
-#### `o = Overlay(options)`
-Creates a new `Overlay` object. The `options` object describes the `Webview` that it inherits from.
+## new Overlay([options])
+To create and insert `Webview` into `wom` tree use `wom.create('overlay', [options])`!
+* `options` Object (optional) - Contains the same properties as `Webview` constructor's options. See `Webview` documentation for details.
 
-#### `o.show()`
-Shows the overlay and enables the input for it.
+_`options` are superset of `Canvas` constructor's options (and `Node`'s as well)! Only `Webview` specific properties are listed here. For the rest see `new Canvas([options])` and `new Node([options])` documentation_
 
-#### `o.hide()`
-Hides the overlay and disables the input for it.
+## Instance Events
+See `Webview` instance events for inherited events.
 
-#### `o.injectNode(name, node)`
+## Instance Properties
+See `Webview` instance properties for inherited properties.
+
+## Instance methods
+See `Webview` instance methods for inherited methods.
+
+#### `Overlay.injectNode(name, node)`
 Injects the given node to the scope of its chromium webview in the `window[name]` global. Emits a `'${name}-ready'` event in the webview's scope on the `process` object.
 
 ``` js
@@ -29,3 +34,12 @@ process.once('foo-ready', () => {
   console.log('ready to use foo', window.foo)
 })
 ```
+
+#### `Overlay.isShown()` (overrides `Node.isShown()`)
+Returns Boolean - Is overlay of this `Overlay` visible. _Contrary to `Node` method it queries the `canvas` type entity instead of base node._
+
+#### `Overlay.show()` (overrides `Node.show()`)
+Shows the overlay of this `Overlay` on the display. `BrowserWindow` starts painting. _Contrary to `Node` method it manipulates the `canvas` type entity instead of base node._
+
+#### `Overlay.hide()` (overrides `Node.hide()`)
+Hides the overlay of this `Overlay` on the display. `BrowserWindow` stops painting. _Contrary to `Node` method it manipulates the `canvas` type entity instead of base node._
