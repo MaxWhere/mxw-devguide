@@ -17,7 +17,7 @@ wom.load({
   local: '../resources',
   // For better look on ball in origin
   camera: {
-    position: {z: 300}
+    position: {z: 500}
   }
 }, () => {
   // Build scene

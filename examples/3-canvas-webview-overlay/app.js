@@ -12,10 +12,6 @@ wom.start({
   // right click for switch between 3d and 2d
   navigation: 'coginav-lite'
 }, () => {
-
-    // TODO: update sdk!!!!
-    wom.resourcePaths = []
-
   // add resource folder of test image
   wom.addResources(path.resolve(
     __dirname, '..', 'resources'
@@ -30,8 +26,7 @@ wom.start({
     'resolution-height': 400,
     position: {x: -50, y: 0, z: -100},
     // accept mouse events to make it orbit-able
-    physical: {raycast: true}, // TODO: update sdk!!!! 
-    // canvas doesn't add canvas phy shape! 'ready' -> 'created'
+    physical: {raycast: true},
     // paint image in it when it's created
     done: c => {
       // transparency applies

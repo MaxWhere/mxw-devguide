@@ -12,10 +12,6 @@ wom.start({
   // right click for switch between 3d and 2d
   navigation: 'coginav-lite'
 }, () => {
-
-  // TODO: update sdk!!!!
-  wom.resourcePaths = []
-
   // add mesh resources
   wom.addResources(path.resolve(
     __dirname, '..', 'resources'

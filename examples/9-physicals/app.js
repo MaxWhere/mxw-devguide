@@ -107,14 +107,14 @@ wom.load({
     wom.selectAll('mesh').forEach( m => {
       if (enable) {
         // Start: balls will fall when mouse hovers them
-        m.on('mouseenter', () => {
+        m.on('mouseEnter', () => {
           m.setPhysicalType('dynamic')
         })
       } else {
         // Reset: mouse doesn't effect balls.
         // Fallen ones move back to initial position
-        m.removeAllListeners('mouseenter')
-        if (m.getPhysicalType() === 'dynamic') { // TODO: update sdk!! 2x
+        m.removeAllListeners('mouseEnter')
+        if (m.getPhysicalType() === 'dynamic') {
           m.setPhysicalType('ghost')
           m.animate('position', {
             to: positions[m.id]
