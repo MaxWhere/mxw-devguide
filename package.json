@@ -26,6 +26,7 @@
   "homepage": "https://github.com/ABC-iRobotics/mxw-boilerplate#readme",
   "dependencies": {
     "lodash": "latest",
-    "three": "latest"
+    "three": "latest",
+    "ws": "^3.1.0"
   }
 }
