@@ -1,6 +1,6 @@
 # Material
 
-> The `Material` class is used to gain access to the materials of a `Mesh`.
+> The `Material` class is used to gain access to the materials of a [`Mesh`](mesh.md).
 
 Materials of standard maxwhere meshes are using a special PBS (physically based shader) shader. Shader properties can be adjusted through `Material` interface. Other kind of materials are accepted as well in the 3d scene and common properties can be adjusted here.
 

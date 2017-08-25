@@ -2,7 +2,7 @@
 
 > The `wom` object is the main module of a maxwhere app. 
 
-It's used to manage app lifecycle, access core resources and features and populate 3d scene. It is subclass of `Node` class and serves as a root node for every object in the 3d scene. 
+It's used to manage app lifecycle, access core resources and features and populate 3d scene. It is subclass of [`Node`](node.md) class and serves as a root node for every object in the 3d scene. 
 
 _`Node` methods can be called on `wom` object. As a root node, changes applied to `Node`'s children will be applied for every object in the scene._
 
@@ -64,7 +64,7 @@ It can contain the following properties:
 * `width` Number - Window width in pixels. Default `1280`
 * `height` Number - Window height in pixels. Default `720`
 * `show` Boolean - Is window visible. Default `true`
-* `'display-mode'` String - Displaying mode of window. Possible values: `manual`(default), `maximized`, `fullscreen`. For non-`manual` `width` and `height` are calculated automatically
+* `'display-mode'` String - Displaying mode of window. Possible values: `manual`(default), `maximized`, `fullscreen`. For non-`manual` display modes `width` and `height` are calculated automatically!
 * `navigation` String - The 3D navigation mode. Possible values: `'coginav-lite'` (default), `coginav`
 * `'navigation-auto-switch'` Boolean - Is 3D navigation automatically switched for right click. Default `true` _Should be `false` for full control over navigation states_
 * `crosshair` Boolean - Is crosshair enabled in 3D navigation mode. Default `true`.

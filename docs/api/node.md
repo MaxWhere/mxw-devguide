@@ -28,8 +28,8 @@ To create and insert `Node` into `wom` tree use `wom.create('node', [options])`!
     * `collision` Boolean (optional) - Whether `Node` receive collision events. Default is `false`.
     * `coefficients` Object (optional) - Dynamic properties of physical
       * `restitution` Number (optional) - Physical restitution. In range [0,1]. Default is `0.7`
-      * `linear-dumping` Number (optional) - Linear dumping. In range [0,1]. Default is `0.1`
-      * `angular-dumping` Number (optional) - Angular dumping. In range [0,1]. Default is `0.1`
+      * `linear-damping` Number (optional) - Linear damping. In range [0,1]. Default is `0.1`
+      * `angular-damping` Number (optional) - Angular damping. In range [0,1]. Default is `0.1`
       * `friction` Number (optional) - Physical friction. In range [0,1]. Default is `0.3`
       * `rolling-friction` Number (optional) - Rolling friction. In range [0,1]. Default is `0.01`
       * `gravity` Object (optional) - Gravity affecting physical entity in [m/s^2]. {x, y, z}. Default is `{x: 0, y: -9.81, z: 0}`
@@ -368,6 +368,7 @@ Sets the type of physical entity of this `Node`
 * `phyt` String - The physical type to set. Possible values are `static`, `dynamic`, `kinematic`, `ghost`.
 
 _Physical type describes the behavior of physical representation in physical world. Following table summarizes the features of physical types._
+
 |  | Can be moved | Collide | Glance off
 |---|---|---|---
 | Static | :x: | :white_check_mark: | :x:
@@ -396,8 +397,8 @@ _Effect of collision depends on the physical object's type_
 #### `Node.getCoeffs()`
 Returns Objects - Coefficient values of the physical entity of this `Node` describing the dynamical behaviour of physical shapes.
   * `restitution` Number - Physical restitution. In range [0,1]
-  * `linear-dumping` Number - Linear dumping. In range [0,1]
-  * `angular-dumping` Number - Angular dumping. In range [0,1]
+  * `linear-damping` Number - Linear damping. In range [0,1]
+  * `angular-damping` Number - Angular damping. In range [0,1]
   * `friction` Number - Physical friction. In range [0,1]
   * `rolling-friction` Number - Rolling friction. In range [0,1]
   * `gravity` Object - Gravity affecting physical entity in [m/s^2]. {x, y, z}
@@ -406,8 +407,8 @@ Returns Objects - Coefficient values of the physical entity of this `Node` descr
 Sets coefficient values of the physical entity of this `Node` describing the dynamical behaviour of physical shapes.
 * `coeff` Object - Coefficient descriptor
   * `restitution` Number (optional) - Physical restitution. In range [0,1]. Default is `0.7`
-  * `linear-dumping` Number (optional) - Linear dumping. In range [0,1]. Default is `0.1`
-  * `angular-dumping` Number (optional) - Angular dumping. In range [0,1]. Default is `0.1`
+  * `linear-damping` Number (optional) - Linear damping. In range [0,1]. Default is `0.1`
+  * `angular-damping` Number (optional) - Angular damping. In range [0,1]. Default is `0.1`
   * `friction` Number (optional) - Physical friction. In range [0,1]. Default is `0.3`
   * `rolling-friction` Number (optional) - Rolling friction. In range [0,1]. Default is `0.01`
   * `gravity` Object (optional) - Gravity affecting physical entity in [m/s^2]. {x, y, z}. Default is `{x: 0, y: -9.81, z: 0}`
@@ -489,7 +490,7 @@ _Supported selectors as defined by CSS 4 and / or jQuery._
 
 __*__: Not part of CSS3
 
-For more info, see [css-select](https://www.npmjs.com/package/css-select).
+For more info, see [css-select](https://github.com/MaxWhere/css-select).
 
 #### `Node.selectAll(q)`
 CCS style selector for `Node`s. Element ID is `Node`'s `id` and element classes are user defined.
