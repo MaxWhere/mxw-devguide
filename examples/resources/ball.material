@@ -1,0 +1,56 @@
+material mxw_pbs_01
+{
+	technique best
+	{
+		pass mxw_pbs
+		{
+			vertex_program_ref physicallybased_vp
+            {
+            }
+
+            fragment_program_ref physicallybased_fp
+            {
+            }
+
+            texture_unit diffuse_map
+            {
+                //texture tiny_white.tga
+                texture wood_01_basecolor.tga
+            }
+
+            texture_unit nomal_map
+            {
+                //texture tiny_straight_normal.tga
+                texture wood_01_normal.tga
+            }
+
+            texture_unit roughness_map
+            {
+                texture tiny_grey.tga
+            }
+
+            texture_unit metallic_map
+            {
+                texture tiny_black.tga
+            }
+
+            texture_unit reflection_map
+            {
+                cubic_texture SaintPetersBasilica.dds combinedUVW
+                //cubic_texture NiagaraFalls3.dds combinedUVW
+                tex_address_mode clamp
+                env_map cubic_reflection
+            }
+
+            texture_unit light_map
+            {
+                texture tiny_white.tga
+            }
+
+            texture_unit ambientocclusion_map
+            {
+                texture tiny_white.tga
+            }
+		}
+	}
+}

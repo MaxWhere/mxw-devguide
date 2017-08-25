@@ -1,0 +1,13 @@
+material "Morph-Cube"
+{
+	technique Morph-Cube_technique
+	{
+		pass Morph-Cube_standard
+		{
+			ambient 0.588 0.588 0.588 1
+			diffuse 0.588 0.588 0.588 1
+			specular 0 0 0 0 25.5
+			emissive 0 0 0 1
+		}
+	}
+}

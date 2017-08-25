@@ -1,0 +1,110 @@
+material "sky_Cloud_A"
+{
+	technique sky_Cloud_technique
+	{
+		pass sky_Cloud_standard
+		{
+			cull_hardware none
+			cull_software none
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 0 25.5
+			emissive 1 1 1 1
+
+			scene_blend alpha_blend
+			depth_write off
+
+			texture_unit sky_Cloud_Diffuse#0
+			{
+				texture Cloud_4.png
+				tex_coord_set 0
+				scroll_anim -0.003 0
+				colour_op modulate
+			}
+		}
+	}
+}
+
+material "sky_Cloud_B"
+{
+	technique sky_Cloud_technique
+	{
+		pass sky_Cloud_standard
+		{
+			cull_hardware none
+			cull_software none
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 0 25.5
+			emissive 1 1 1 1
+
+			scene_blend alpha_blend
+			depth_write off
+
+			texture_unit sky_Cloud_Diffuse#0
+			{
+				texture Cloud_4.png
+				tex_coord_set 0
+				scroll_anim -0.002 0
+				colour_op modulate
+			}
+		}
+	}
+}
+
+material "sky_Bird"
+{
+	technique sky_Bird_technique
+	{
+		pass sky_Bird_standard
+		{
+			cull_hardware none
+			cull_software none
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 0 25.5
+			emissive 1 1 1 1
+
+			scene_blend alpha_blend
+			depth_write off
+
+			texture_unit sky_Bird_Diffuse#0
+			{
+				anim_texture birds_A__Layer.png 47 10
+				tex_coord_set 0
+				colour_op modulate
+			}
+		}
+	}
+}
+material Glass-Room_Sky
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			depth_write off
+			texture_unit
+			{
+				cubic_texture Walkway_Sky.jpg combinedUVW
+				tex_address_mode clamp
+			}
+		}
+	}
+	technique sceneinfo
+	{
+		scheme SceneInfo
+		pass
+		{
+			vertex_program_ref SceneInfoVS
+			{
+				param_named_auto ModelViewProj worldviewproj_matrix
+                param_named_auto Model world_matrix
+			}
+			fragment_program_ref SceneInfoPS
+			{
+			}
+		}
+	}
+}
