@@ -1,0 +1,14 @@
+{
+  "title": "6-load-config",
+  "navigation": "coginav-lite",
+  "local": "../resources",
+  "environment": {
+    "ambient": { "r": 0.1, "g": 0.1, "b": 0.1, "a": 1 },
+    "sky-box": { "material": "Glass-Room_Sky" }
+  },
+  "camera": {
+    "position": { "x": 0, "y": 100, "z": 0 },
+    "orientation": {"angle": -30, "axis": {"x": 1, "y": 0, "z": 0}}
+  },
+  "main": "main-view.jsx"
+}
