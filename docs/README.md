@@ -58,4 +58,5 @@ Available examples:
 - [9. Using physics of scene objects](../examples/9-physicals)
 - [10. Use Oge mesh animations](../examples/10-mesh-animator)
 - [11. Control material shader](../examples/11-shader-control)
-- [11. Complex scene with minigame](../examples/12-complex-scene)
+- [12. Complex scene with minigame](../examples/12-complex-scene)
+- [13. Use server and websocket to move 3d object](../examples/13-websockets)
