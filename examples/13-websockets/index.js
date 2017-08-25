@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 require('./server')
 
 startStop = function() {

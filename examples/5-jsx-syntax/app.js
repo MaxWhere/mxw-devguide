@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 5-jsx-syntax
  * Rendering objects into 3d scene using jsx syntax

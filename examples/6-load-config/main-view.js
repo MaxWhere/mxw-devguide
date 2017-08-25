@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 const { wom } = require('maxwhere')
 
 module.exports = [

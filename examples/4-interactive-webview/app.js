@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 4-interactive-webview
  * Using UI overlay to manipulate wom objects from HTML

@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 7-animations
  * Showing animation capabilities of Node and Light

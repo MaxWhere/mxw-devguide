@@ -2,7 +2,8 @@
 
 > Developer's guide to Maxwhere.
  
-Maxwhere engine is ....
+Maxwhere engine is a multipurpose 3D software framework that combines the power of 3D worlds and web-based 
+content controlling everything through JavaScript code.
 
 It is built up from a native C++ core, a JS wrapper layer and an Electron-based shell layer which provides WOM (Where Object Model) to the developer. The native core is responsible for every low-level functionality, such as rendering the scene, managing object repository and event system, and running physical simulation. WOM turns the whole 3d scene to an accessible and living object in JS and broaden the engine’s capabilities with node.js features.
 
@@ -13,6 +14,7 @@ Maxwhere SDK allows you to create, interact or customize Wheres for Maxwhere. Wh
 ```
 $ npm i -g @mxw/sdk
 ```
+*NOTE: The MaxWhere engine and the SDK is a propritary software and can be accessed only by our partners. For further information about trial, licensing, etc. please contact us in email (office@maxwhere.com)*
 
 ## API References
 

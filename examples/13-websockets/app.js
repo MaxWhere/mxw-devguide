@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 13-websockets
  * Moving 3d object according to data received from

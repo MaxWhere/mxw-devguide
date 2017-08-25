@@ -1,7 +1,7 @@
 {
   "name": "mxw-boilerplate",
   "version": "1.0.0",
-  "description": "Starting point for learning MAXWHER app development",
+  "description": "Starting point for learning MaxWhere development",
   "main": "app.js",
   "directories": {
     "doc": "docs"
@@ -18,8 +18,8 @@
     "whapp",
     "vr"
   ],
-  "author": "Peter Galambos (MISTEMS Ltd.)",
-  "license": "",
+  "author": "MISTEMS Ltd.",
+  "license": "LICENSE.txt",
   "bugs": {
     "url": "https://github.com/ABC-iRobotics/mxw-boilerplate/issues"
   },

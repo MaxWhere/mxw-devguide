@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 3-canvas-webview-overlay
  * Rendering canvas and webview into 3d scene and overlay

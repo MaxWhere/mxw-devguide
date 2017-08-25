@@ -1,3 +1,5 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
+
 const { app } = require('electron')
 const { wom } = require('maxwhere')
 const path = require('path')
@@ -6,7 +8,7 @@ const scenePath = path.join(__dirname, 'static', 'scene')
 wom.setConfig({
   width: 1280,
   height: 720,
-  title: 'Maxwhere - Boilerplate App',
+  title: 'MaxWhere - Boilerplate App',
   'display-mode': 'maximized',
   navigation: 'coginav-lite',
   show: false

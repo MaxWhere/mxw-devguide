@@ -1,5 +1,7 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
+
 const { ipcRenderer } = require('electron')
-const WebSocket = require('ws');
+const WebSocket = require('ws')
 const port = 1337
 let sending = true
 let wss = null

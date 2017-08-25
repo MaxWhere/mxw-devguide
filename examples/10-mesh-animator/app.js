@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 10-mesh-animator
  * Plays animation of Ogre mesh files.

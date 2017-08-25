@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 8-event-handle
  * Using event listeners of wom and 3d objects

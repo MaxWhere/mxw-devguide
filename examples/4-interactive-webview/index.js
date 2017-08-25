@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 const { ipcRenderer } = require('electron')
 const step = 20
 

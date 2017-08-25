@@ -1,3 +1,4 @@
+// Copyright (C) 2016-2017 MISTEMS Ltd.
 /**
  * Example 6-load-config
  * Rendering initial 3d scene by loading json
