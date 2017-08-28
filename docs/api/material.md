@@ -7,7 +7,11 @@ Materials of standard maxwhere meshes are using a special PBS (physically based 
 _`Material`s are wrappers of Ogre materials. For further reading on Ogre materials visit http://www.ogre3d.org/tikiwiki/-Material_
 
 ```js
-Example how to obtain a material from mesh
+let m = wom.select('mesh')
+let mat = m.material(m.subvisual(0))
+let surfcol = mat.shaderValue('SurfacecolorbiasR')
+mat.setSpecular({r: 1, g: 0, b: 0, a: 1})
+mat.setShader('SurfacecolorbiasR', surfcol / 2 )
 ```
 
 ## Instance methods

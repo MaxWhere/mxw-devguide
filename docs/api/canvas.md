@@ -24,7 +24,18 @@ To create and insert `Canvas` into `wom` tree use `wom.create('canvas', [options
 _`options` are superset of `Node` constructor's options! Only `Canvas` specific properties are listed here. For the rest see `new Node([options])` documentation_
 
 ```js
-Example
+  let cig = wom.create('canvas', {
+    location: 'in-game',
+    width: 40,
+    height: 40,
+    'resolution-width': 400,
+    'resolution-height': 400,
+    position: {x: -50, y: 0, z: -100},
+    done: c => {
+      c.loadPicture('logo.png')
+    }
+  })
+  wom.render(cig)
 ```
 
 ## Instance Events

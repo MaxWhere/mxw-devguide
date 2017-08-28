@@ -375,9 +375,10 @@ Returns Function - The builder function for a new `wom` component. It creates ne
   * `opts` any - Containing initializer parameters passed to created component's `init` function
   * `c` `Component` - The created `wom` component
 
-```js
+<!-- ```js
 example required
 ```
+-->
 
 ## Core event listeners
 Listeners can be registered both for `wom`'s own event types and for events emitted from 3d scene by the core. `wom`'s own events are described in `Events` section, while 3d events are listed in listener functions specifically.

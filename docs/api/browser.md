@@ -2,11 +2,7 @@
 
 > `Component` consists of a [`Webview`](webview.md) and UI [`Overlay`](overlay.md)s implementing a fully featured browser.
 
-`Browser`s can be used without any further adjustment. Mouse and keyboard inputs are handled automatically. UI `Overlay`s are opening when the `Webview` is selected in the 3d scene by click or double click. UI contains every required navigation and editing tool for implementing a fully featured browser. 
-
-```
-image (?)
-```
+`Browser`s can be used without any further adjustment. Mouse and keyboard inputs are handled automatically. UI `Overlay`s are opening when the `Webview` is selected in the 3d scene by click or double click. UI contains every required navigation and editing tool for implementing a fully featured browser.
 
 ## wom.create('browser', [options])
 Creates and inserts `Browser` into `wom` tree.

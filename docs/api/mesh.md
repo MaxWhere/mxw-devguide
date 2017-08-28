@@ -15,7 +15,13 @@ To create and insert `Mesh` into `wom` tree use `wom.create('mesh', [options])`!
 _`options` are superset of `Node` constructor's options! Only `Mesh` specific properties are listed here. For the rest see `new Node([options])` documentation_
 
 ```js
-how to obtain an instance
+let m = wom.create('mesh', {
+  url: 'ball.mesh',
+  position: {x: 0, y: 0, z: -200},
+  scale: 5,
+  autophysical: true
+})
+wom.render(m)
 ```
 
 ## Instance Events

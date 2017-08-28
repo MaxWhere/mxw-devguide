@@ -35,7 +35,15 @@ To create and insert `Node` into `wom` tree use `wom.create('node', [options])`!
       * `gravity` Object (optional) - Gravity affecting physical entity in [m/s^2]. {x, y, z}. Default is `{x: 0, y: -9.81, z: 0}`
 
 ```js
-how to create an instance with wom.creates
+let n = wom.create('node', {
+  position: {x: 0, y: 0, z: -200},
+  physical: {
+    'link-type': 'static',
+    raycast: false,
+    collision: true
+  }
+})
+wom.render(n)
 ```
 
 ## Instance Events
@@ -448,9 +456,6 @@ CCS style selector for `Node`s. Element ID is `Node`'s `id` and element classes 
 Returns Object - The first match of selector, or `null` if there was no match.
 * `q` String - Selector
 
-```js
-Example
-```
 _Supported selectors as defined by CSS 4 and / or jQuery._
 
 * Universal (`*`)
@@ -496,9 +501,5 @@ For more info, see [css-select](https://github.com/MaxWhere/css-select).
 CCS style selector for `Node`s. Element ID is `Node`'s `id` and element classes are user defined.
 Returns Object[] - Every match of selector, or `[]` if there was no match.
 * `q` String - Selector
-
-```js
-Example
-```
 
 _See `Node.select` description for details_

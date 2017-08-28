@@ -20,7 +20,13 @@ To create and insert `Light` into `wom` tree use `wom.create('light', [options])
 _`options` are superset of `Node` constructor's options! Only `Light` specific properties are listed here. For the rest see `new Node([options])` documentation_
 
 ```js
-Example
+  let l = wom.create('light', {
+    position: {x: 0, y: 300, z: -200},
+    diffuse: {r: 1, g: 0, b: 0},
+    lighttype: 'directional',
+    direction: {x: 0, y: 1, z: -1}
+  })
+  wom.render(l)
 ```
 
 ## Instance Events
