@@ -5,7 +5,7 @@ const { wom } = require('maxwhere')
 const path = require('path')
 const scenePath = path.join(__dirname, 'static', 'scene')
 
-wom.setConfig({
+wom.setAppConfig({
   width: 1280,
   height: 720,
   title: 'MaxWhere - Boilerplate App',

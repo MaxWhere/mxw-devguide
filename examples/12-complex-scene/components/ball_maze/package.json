@@ -1,0 +1,15 @@
+{
+  "name": "ball_maze",
+  "version": "1.0.0",
+  "description": "example component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "three": "latest",
+    "lodash": "latest"
+  },
+  "author": "Mistems Ltd",
+  "license": "ISC"
+}
