@@ -50,7 +50,7 @@ A slideshow of local files is about to be loaded into webtable
 ## Instance properties
 
 ### `webtable.webview`
-The [`Webview`] of the webtable. Provides access to the displayed content.
+The [`Webview`](webview.md) of the webtable. Provides access to the displayed content.
 
 ### Per intance properties
 Properties which can be different for every webtable instance 
