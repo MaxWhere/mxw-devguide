@@ -6,12 +6,18 @@ Materials of standard maxwhere meshes are using a special PBS (physically based 
 
 _`Material`s are wrappers of Ogre materials. For further reading on Ogre materials visit http://www.ogre3d.org/tikiwiki/-Material_
 
-```js
-let m = wom.select('mesh')
-let mat = m.material(m.subvisual(0))
-let surfcol = mat.shaderValue('SurfacecolorbiasR')
-mat.setSpecular({r: 1, g: 0, b: 0, a: 1})
-mat.setShader('SurfacecolorbiasR', surfcol / 2 )
+```jsx
+wom.render(
+  <mesh
+    url='ball.mesh'
+    done={m => {
+      const mat = m.material(m.subvisual(0))
+      const scbR = mat.shaderValue('SurfacecolorbiasR')
+      scbR += 0.1
+      mat.setShader('SurfacecolorbiasR', scbR)
+    }}
+  />
+)
 ```
 
 ## Instance methods
@@ -31,8 +37,8 @@ Sets the value of the specified PBS shader parameter
 
 The following table shows the accepted value type and range per shader paramter.
 <!-- (full table)
-| Param name | Shader program | Program param | Param Value |
-|---|---|---|---|
+| Param name | Shader program | Program param | Param Value
+|---|---|---|---
 | `SurfacecolorbiasR` | fragment | R of `surface_color_bias` | Number (range [0, 1])
 | `SurfacecolorbiasG` | fragment | G of `surface_color_bias` | Number (range [0, 1])
 | `SurfacecolorbiasB` | fragment | B of `surface_color_bias` | Number (range [0, 1])
@@ -72,7 +78,7 @@ The following table shows the accepted value type and range per shader paramter.
 | `Ambientocclusionmap` | texture | `ambientocclusion_map` | String (image file name)
 -->
 | Parameter name | Parameter Value |
-|---|---|---|---|
+|---|---|
 | `SurfacecolorbiasR` | Number (range [0, 1])
 | `SurfacecolorbiasG` | Number (range [0, 1])
 | `SurfacecolorbiasB` | Number (range [0, 1])
@@ -118,6 +124,18 @@ Returns Object {min: Number, max: Number} describing the minimum and maximum val
 #### `Material.shaderValue(param)`
 Returns Number which is the current value of the specified shader parameter. _Doesn't apply on String type parameters_
 * `param` String | Number The name or index of shader parameter to query.
+
+### Resource manipulation
+
+#### `Material.save(path)`
+Saves the `Material` into file.
+* `path` Path of file to save into
+
+#### `Material.clone([name])`
+Clones this `Material`
+* `name` String (optional) - Name of the cloned `Material` to set.
+
+Returns `Material` - New `Material` with identical properties as original one.
 
 ### Common parameters
 
@@ -197,13 +215,3 @@ Sets whether lighting is allowed on `Material`
 #### `Material.setCullingMode(mode)`
 Sets culling mode of `Material`
 * `mode` Number - Culling mode to set. _`0` - culling is off `1` - clockwise culling `2` - anticlockwise culling_
-
-#### `Material.save(path)`
-Saves the `Material` into file.
-* `path` Path of file to save into
-
-#### `Material.clone([name])`
-Clones this `Material`
-* `name` String (optional) - Name of the cloned `Material` to set.
-
-Returns `Material` - New `Material` with identical properties as original one.

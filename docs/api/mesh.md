@@ -4,37 +4,33 @@
 
 `Mesh` is subclass of [`Node`](node.md). It adds `'mesh'` type entity to `Node` base class and provides mesh accessor and manipulator functions as extension. `'mesh'` type entities are visible objects in the 3d scene and described by an Ogre `.mesh` file.
 
-<!--
-_Some of base `Node` properties have different meaning for `Mesh` objects, thus some inherited `Node` property is documented here as well._
--->
 ## `new Mesh([options])`
 To create and insert `Mesh` into `wom` tree use `wom.create('mesh', [options])`!
 * `options` Object (optional)
-  * `url` String (required) - Path to an Ogre mesh file.
+  * `url` String (required) - Name of Ogre mesh file.
+  * `meshFolder` String (optional) - Path to Ogre mesh file. _If not defined, resource folders are used._
 
-_`options` are superset of `Node` constructor's options! Only `Mesh` specific properties are listed here. For the rest see `new Node([options])` documentation_
+_`options` are superset of `Node` constructor's options! Only `Mesh` specific properties are listed here. For the rest see [`new Node([options])`](node.md#new-nodeoptions) documentation_
 
-```js
-let m = wom.create('mesh', {
-  url: 'ball.mesh',
-  position: {x: 0, y: 0, z: -200},
-  scale: 5,
-  autophysical: true
-})
-wom.render(m)
+```jsx
+wom.render(
+  <mesh
+    url='cube.mesh'
+    x={80}
+    scale={10}
+    autophysical={true}
+  />
+)
 ```
 
 ## Instance Events
 See `Node` instance events for inherited events.
 
-#### `'ready'`
-Emitted when the `Mesh` is successfully loaded into 3d scene. _This event is used for `wom`'s `'ready'` event_
-
 #### `'created'`
-Additionally to `Node`'s `'created'` event it also means that the `Mesh` is successfully loaded into 3d scene. _For `Mesh` it's the same as `'ready'`_
+Additionally to `Node`'s `'created'` event it also means that the `Mesh` is successfully loaded into 3d scene.
 
 #### `'updated'`
-Emitted when the `Mesh` is updated in the 3d scene. Possible causes are: submesh list chenges.
+Emitted when the `Mesh` is updated in the 3d scene. Possible causes are: submesh list changes.
 
 ## Instance Properties
 See `Node` instance properties for inherited properties.
@@ -69,6 +65,7 @@ Returns Object[] - The array of subvisuals of this `Mesh`
 
 #### `Mesh.subvisual(index)`
 * `index` Number - Index of subvisual of `Mesh` to get.
+
 Returns Object - The specified subvisual of this `Mesh`
   * `material` Object <!-- TODO: It's MaterialWrap! Put it in wom.Material without explicit call of Mesh.material(Mesh.subvisual) -->
   * `index` Number
@@ -77,12 +74,13 @@ Returns Object - The specified subvisual of this `Mesh`
 * `subvisual` Object - Subvisual object to extract the material from.
   * `material` Object <!-- TODO: It's MaterialWrap! Put it in wom.Material without explicit call of Mesh.material(Mesh.subvisual) -->
   * `index` Number
+
 Returns Object - Extracted `Material` object of the specified subvisual Object. See `Material` documentation for object details.
 
 _Returned Objects of `subvisual` function can be passed here, and it returns the corresponding `Material` object_
 
 ```js
-example for retrieving `Material` from `Mesh`
+const material = mesh.material(mesh.subvisual(0))
 ```
 
 #### `Mesh.animatorNames()`
@@ -93,6 +91,7 @@ _Ogre mesh files can contain vertex or skeleton animations which can be accessed
 #### `Mesh.animator(name)`
 Extracts the specified mesh animation object from `Mesh`
 * `name` String - Name of the mesh animation to extract
+
 Returns an Object - Mesh animation object with controller methods
   * `start` Function - Starts mesh animation playback from the current time position
   * `pause` Function - Pauses mesh animation playback
@@ -111,15 +110,18 @@ Returns an Object - Mesh animation object with controller methods
 
 _Ogre mesh files can contain vertex or skeleton animations which can be accessed here_
 
+Example
 ```js
-example using Ogre example mesh files
+const mesh = <mesh url='penguin.mesh' />
+const amuse = mesh.animator('amuse')
+amuse.start()
 ```
 
 #### `Mesh.save(path)`
 Saves this `Mesh` into a file.
 * `path` String - The path to file.
 
-_Any modification made to `Mesh` will be saved. Overwrites if file exists._
+_Any modification made to `Mesh` will be saved. Overwrites file if exists!_
 
 #### `Mesh.show()` (`Node.show()`)
 Shows the mesh in 3d scene.

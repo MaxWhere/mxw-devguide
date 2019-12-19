@@ -2,7 +2,7 @@
 
 > The `wom` object is the main module of a maxwhere app. 
 
-It's used to manage app lifecycle, access core resources and features and populate 3d scene. It is subclass of [`Node`](node.md) class and serves as a root node for every object in the 3d scene. 
+It's used to manage app lifecycle, access maxwhere engine resources and features and populate 3d scene. It is subclass of [`Node`](node.md) class and serves as a root node for every object in the 3d scene. 
 
 _`Node` methods can be called on `wom` object. As a root node, changes applied to `Node`'s children will be applied for every object in the scene._
 
@@ -20,10 +20,31 @@ wom.start({
 Indicates that the native window has been loaded successfully.
 
 #### `'ready'`
-Indicates that the `wom` has been set up successfully and ready to use. Initial objects are presented in the scene.
+Indicates that the `wom` has been set up and ready to use. Initial objects are successfully added to the scene.
 
-#### `'quit'`
-Indicates that the native window has been closed.
+#### `'inserted'`
+Indicates that a node is inserted into 3d scene by `Node.create`
+
+ * Event `Node` The inserted `Node` object
+
+#### `'loading-state-changed'`
+Indicates that state of the `Mesh` loading process has been changed
+
+ * Event Object
+   * `loaded` Number Number of already loaded `Mesh` objects
+   * `total` Number Total number of `Mesh` objects to load
+   * `percent` Number Current state of `Mesh` loading process in [0-1] interval
+
+#### `'unloading-state-changed'`
+Indicates that state of the `Mesh` unloading process has been changed
+
+ * Event Object
+   * `unloaded` Number Number of already unloaded `Mesh` objects
+   * `total` Number Total number of `Mesh` objects to unload
+   * `percent` Number Current state of `Mesh` unloading process in [0-1] interval
+
+#### `'clear-complete'`
+Emitted when `wom.clear` successfully finished with unloading the scene
 
 #### `'resize'`
 Indicates that the native window has been resized. When emitted `wom.appConfig` already has up-to-date `width` and `height` values.
@@ -32,24 +53,22 @@ Indicates that the native window has been resized. When emitted `wom.appConfig` 
    * `w` Number New window width in pixels
    * `h` Number New window height in pixels
 
-#### `'before-close'`
-Called before core is shut down by `wom.close`. In this stage the 3D scene and `wom` tree are still intact.
-
-#### `'after-close'`
-Called after core is shut down by `wom.close`. In this stage the 3D scene and `wom` tree are already cleared.
-
-#### `'loading-state-changed`
-Indicates when state of the initial `Mesh` loading process changes
+#### `'dpi-change'`
+Indicates that the pixel scale factor of native high-DPI window has been changed. When emitted `wom.appConfig` already has up-to-date `displayDPI` value.
 
  * Event Object
-   * `loaded` Number Number is currently loaded `Mesh` objects
-   * `total` Number Total number of `Mesh` objects to load
-   * `percent` Number Current state of `Mesh` loading process in [0-1] interval
+   * `dpi` New scale factor
 
-#### `'inserted'`
-Indicates that a node is inserted into 3d scene by `Node.create`
+_Even is emitted only if high-DPI is enabled (appConfig.highDPI)_
 
- * Event `Node` The inserted `Node` object
+#### `'before-close'`
+Called before engine is shut down by `wom.close`. In this stage the 3D scene and `wom` tree are still intact.
+
+#### `'after-close'`
+Called after engine is shut down by `wom.close`. In this stage the 3D scene and `wom` tree are already cleared.
+
+#### `'quit'`
+Indicates that the native window has been closed.
 
 ## Properties
 
@@ -61,16 +80,55 @@ An Object storing the configuration properties of the app. It is either read fro
 
 It can contain the following properties:
 * `title` String - Window title. Default `MaxWhere`
-* `width` Number - Window width in pixels. Default `1280`
-* `height` Number - Window height in pixels. Default `720`
+* `width` Number - Window width in pixels. Default `1280` _Not applied if less than `minWidth`_
+* `height` Number - Window height in pixels. Default `720` _Not applied if less than `minHeight`_
 * `show` Boolean - Is window visible. Default `true`
-* `'display-mode'` String - Displaying mode of window. Possible values: `manual`(default), `maximized`, `fullscreen`. For non-`manual` display modes `width` and `height` are calculated automatically!
+* `displayMode` String - Displaying mode of window. Possible values: `manual`(default), `maximized`, `fullscreen`. For non-`manual` display modes `width` and `height` are calculated automatically!
+* `displayPosition` Object {x, y} - Window's position in the frame of displays. Default is the center of the primary display.
+* `displayDPI` Number (Positive) - Pixel scale factor of the window.  Default is the scale factor of primary display
+* `highDPI` Boolean - Enable high-DPI resolution display. Default `true` _If disabled, `displayDPI` is initialized to `1.0`_
+* `worldResolutionScale` Number (Positive) - Scale of 3d scene (world) resolution according to window (overlay) full resolution. Default is `1 / displayDPI` _For high-DPI displays it's usually unnecessary to render 3d world in full resolution_
 * `navigation` String - The 3D navigation mode. Possible values: `'coginav-lite'` (default), `coginav`
-* `'navigation-auto-switch'` Boolean - Is 3D navigation automatically switched for right click. Default `true` _Should be `false` for full control over navigation states_
-* `crosshair` Boolean - Is crosshair enabled in 3D navigation mode. Default `true`.
-* `'near-clip'` Number - Near clip distance of camera. Default `1.0`
-* `'far-clip'` Number - Far clip distance of camera. Default `50000.0`
-* `'physical-limits'` Object - Physical limits for 3D objects of the scene. Every value adds one physical boundary separately directed to scene origin. Default is empty. _Effects object with attached physical hitshape only_
+* `navigationAutoSwitch` Boolean - Is 3D navigation automatically switched for right click. Default `true` _Should be `false` for full control over navigation states_
+* `crosshair` Boolean - Is crosshair enabled in 3D navigation mode. Default `true`
+* `minWidth` Number - Minimum window width in pixels. Default `800`
+* `minHeight` Number - Minimum window height in pixels. Default `600`
+* `logFolder` String - Path to folder where the log file should be generated. Default is `%appdata%` (`C:\Users\<username>\AppData\Roaming`) on Windows and `/Users/<username>/Library/Preferences` on MacOS
+* `splash` Object - Splash screen options. Splash screen is displayed during the startup if defined. Default is undefined. _Splash is displayed from start until the first appearance of the native window. If the window is visible it's `'native ready'`, otherwise it's the first call of `wom.showWindow`_
+  * `url` String - URL of splash screen html to display.
+  * `width` Number - Width of slash screen in pixels. Default `640`
+  * `height` Number - Height of slash screen in pixels. Default `480`
+* `AAType` String - Spatial anti-aliasing mode of 3d scene. Possible values are `OFF` (default), `FXAA` and `MSAA`
+* `AAHint` Number - `MSAA` multisampling option. Possible values are `2`, `4`, `8` (default)
+
+#### `wom.whereConfig`
+An Object storing the configuration properties of the loaded where. It is either read from a `.json` file or an object passed to `wom.load` directly. It's a superset of `wom.appConfig` and passed to `wom.start` after processing.
+
+It can contain the following properties:
+* `local` String[] - Resource folder paths of the where (absolute path or relative to `.json` containing folder). Default is empty
+* `environment`: Object - Environmental configuration
+  * `background` Object {r, g, b, a} - Viewport background color. Default `{r: 0.4, g: 0.4, b: 0.4, a: 1}`
+  * `ambient` Object {r, g, b, a} - Scene ambient light color. Default `{r: 0.3, g: 0.3, b: 0.3, a: 1}`
+  * `fog` Object - Fog properties
+    * `mode` Number - Fog density mode. Possible values describing the fog density increase: `0`(default): fog disabled, `1`: Exponential, `2`: Squared exponential, `3`: Linear.
+    * `color` Object {r, g, b, a} - Fog color. Default `{r: 1, g: 1, b: 1, a: 1}`
+    * `expDensity` Number - Fog density in mode `1`, `2`. Value range is `[0-1]`. Default `0.001`
+    * `linearStart` Number - Fog start distance in mode `3`. Default `0.0`
+    * `linearEnd` Number - Fog full density distance in mode `3`. Default `1.0`
+  * `skybox` Object - Skybox of the scene
+    * `material` String - Name of the material the skybox will use 
+    * `enable` Boolean Is skybox enabled. Default is `false` and is automatically `true` if `material` is defined
+    * `distance` Number - Distance from the camera to each plane of the skybox. Default `5000`
+* `camera` Object - Camera of the scene
+  * `position` Object  {x, y, z} - Camera position in world coordinates. Default `{x: 0, y: 0, z: 0}`
+  * `orientation` Object {w, x, y, z} or {angle: Number, axis: {x, y, z}} - Camera orientation in world frame. Default `{w: 1, x: 0, y: 0, z: 0}`.
+  * `limits` Object - Movement boundaries of camera. If distance between `min` and `max` is zero, no limits are set.
+    * `min` Object {x, y, z} - Left-bottom-far corner of bounding box. Default `{x: 0, y: 0, z: 0}`
+    * `max` Object {x, y, z} - Right-top-near corner of bounding box. Default `{x: 0, y: 0, z: 0}`
+  * `nearClip` Number - Near clip distance of camera. Default `1.0`
+  * `farClip` Number - Far clip distance of camera. Default `50000.0`
+  * `fovY` Number - Vertical field of view angle in degrees. Default `45.0`
+* `physicalLimits` Object - Physical limits for 3D objects of the scene. Every value adds one physical boundary separately directed to scene origin. Default is empty. _Effects object with attached physical hitshape only_
   * `x` Object - Physical boundaries along `x` axis.
     * `min` Number
     * `max` Number
@@ -80,50 +138,25 @@ It can contain the following properties:
   * `z` Object - Physical boundaries along `z` axis.
     * `min` Number
     * `max` Number
-* `'camera-limits'` Object - Moving boundaries of camera. If distance between `min` and `max` is zero, no limits are set.
-  * `min` Object - Left-bottom-far corner of bounding box. {x, y, z} Default `{x: 0, y: 0, z: 0}`
-  * `max` Object - Right-top-near corner of bounding box. {x, y, z} Default `{x: 0, y: 0, z: 0}`
-
-#### `wom.config`
-An Object storing the configuration properties of the loaded where. It is either read from a `.json` file or an object passed to `wom.load` directly. It's a superset of `wom.appConfig` and passed to `wom.start` after processing.
-
-It can contain the following properties:
-* `local` String[] - Local resource folder paths of the where. Default is empty
-* `environment`: Object - Environmental configuration
-  * `background` Object - Viewport background color. {r, g, b, a} Default `{r: 0.4, g: 0.4, b: 0.4, a: 1}`
-  * `ambient` Object - Scene ambient light color. {r, g, b, a} Default `{r: 0.3, g: 0.3, b: 0.3, a: 1}`
-  * `fog` Object - Fog properties
-    * `mode` Number - Fog density mode. Possible values describing the fog density increase: `0`(default): fog disabled, `1`: Exponential, `2`: Squared exponential, `3`: Linear.
-    * `color` Object - Fog color. {r, g, b, a} Default `{r: 1, g: 1, b: 1, a: 1}`
-    * `expDensity` Number - Fog density in mode `1`, `2`. Value range is `[0-1]`. Default `0.001`
-    * `linearStart` Number - Fog start distance in mode `3`. Default `0.0`
-    * `linearEnd` Number - Fog full density distance in mode `3`. Default `1.0`
-  * `'sky-box'` Object - Skybox of the scene
-    * `material` String - Name of the material the skybox will use 
-    * `enable` Boolean Is skybox enabled. Default `false`
-    * `distance` Number - Distance from the camera to each plane of the skybox. Default `5000`
-* `camera` Object - Camera initial configuration
-  * `position` Object - Camera position in world coordinates. {x, y, z} Default `{x: 0, y: 0, z: 0}`
-  * `orientation` Object - Camera orientation in world frame. {w, x, y, z} or {angle: Number, axis: {x, y, z}} Default `{w: 1, x: 0, y: 0, z: 0}`.
 * `components` Object - Key-Value Map of components to install. Installed components can be used in initial scene description in `main` Default is empty
     * `<component name>...` String - Component path as String
 * `main` String - Script describing initial scene to load. js or jsx files are accepted. _Content of script will be required and passed to `wom.render`_
 * <+ any `appConfig` property>
 
-#### `wom.configURL`
-A String that is the absolute URL of the configuration file, if there is one.
+#### `wom.whereConfigURL`
+A String that is the absolute URL of the where configuration files (if read from a `.json`, it's automatically assigned to the containing folder).
 
 #### `wom.resourcePaths`
-A String[] containing resource folder paths added to `wom`
+An Object of Resource groups and corresponding resource folder paths added to `wom` (keys: String - group name, values: String[] resource locations)
 
 #### `wom.isNativeReady`
-A Boolean indicating that the native window has been loaded successfully. _When turns true, `''native ready''` event is emitted_
+A Boolean indicating that the native window has been loaded successfully. _When turns true, `'native ready'` event is emitted_
 
 #### `wom.isReady`
 A Boolean indicating that the `wom` has been set up successfully and ready to use.
 
 #### `wom.isQuitting`
-A Boolean indicating that the core is quit. _When turns true, `'quit'` event is emitted_
+A Boolean indicating that the maxwhere engine is quitting. _When turns true, `'quit'` event is emitted_
 
 ## Methods
 
@@ -132,10 +165,30 @@ If the return value is not specified the method returns `wom` itself.
 ### lifecycle methods
 
 #### `wom.start([opts, callback])`
-Starts core using provided options. Opens a new native window with an empty scene.
+Starts maxwhere engine using provided options. Opens a new native window with an empty scene.
 
 * `opts` Object (optional) - Options for the app, can contain the same properties as `wom.appConfig`
-* `callback` Function (optional) - Called when maxwhere engine is started
+* `callback` Function (optional) - Called when maxwhere engine is successfully started
+
+Example
+```js
+wom.start({
+  displayMode: 'maximized',
+  title: 'MaxWhere',
+  navigation: 'coginav-lite',
+  navigationAutoSwitch: false,
+  crosshair: false,
+  highDPI: process.platform !== 'darwin', // disable retina
+  AAType: 'MSAA',
+  AAHint: 8,
+  splash: {
+    width: 800,
+    height: 450,
+    url: path.join(__dirname, 'splash.html')
+  },
+  show: false
+}, () => { /* ready */ })
+```
 
 #### `wom.load([config, callback])`
 Starts maxwhere engine and load initial scene using provided options. Opens a new native window with the initial scene. Clears the current scene if not empty!
@@ -143,18 +196,49 @@ Starts maxwhere engine and load initial scene using provided options. Opens a ne
 * `config` Object | String
   - Configuration object, which can contain the same properties as `wom.config`
   - Path to `.json` file containing configuration object
-* `callback` Function (optional) - Called when core is started and initial scene is built in `wom`. _This state not necessarily means that object creation is finished (use `'ready'` callback for react when every `mesh` is loaded)_
+* `callback` Function (optional) - Called when the initial 3d scene is built in `wom`. _This state not necessarily means that object creation is finished (use `'ready'` callback for react when every `mesh` is loaded)_
+
+Example
+```js
+// Extracted example for a `wom.load(path/to/where.json)`
+wom.load({
+  main: 'index.jsx',
+  environment: {
+    background: { r: 0.12, g: 0.16, b: 0.24, a: 1 },
+    ambient: { r: 0.12, g: 0.16, b: 0.24, a: 1 },
+    skybox: { material: 'Erad_skybox' }
+  },
+  camera: {
+    position: {
+      x: -368.279052734375,
+      y: 421.9214782714844,
+      z: -605.9902954101562
+    },
+    orientation: {
+      w: -0.23730319738388062,
+      x: 0.03828200697898865,
+      y: 0.9582870602607727,
+      z: 0.15462137758731842
+    },
+    fovY: 60
+  },
+  local: './resources',
+  components: {
+    'material-painter': './components/material-painter/component.json'
+  }
+})
+```
 
 #### `wom.clear()`
-Clears the scene by removing every child node of `wom`
+Clears the entire 3d scene by removing every child node of `wom`
 
 #### `wom.reload([callback])`
-Reloads the scene by calling `wom.load` with the current configuration. This means that the scene will be cleared and only objects described in configuration will be created again.
+Reloads the scene by calling `wom.load` with the current configuration. This means that the scene will be cleared and only objects described in `whereConfig` will be created again.
 
 * `callback` Function (optional) - Called when the scene is reloaded. _This state not necessarily means that object creation is finished (use `'ready'` callback for react when every `mesh` is loaded)_
 
 #### `wom.close()`
-Clears the `wom` tree, the 3d scene and shuts down core. _During the run of this function 'before-close' and 'after-close' are emitted_
+Shuts down the maxwhere engine and clears the 3d scene (destroys `wom` tree). _During the run of this function 'before-close' and 'after-close' are emitted_
 
 ### wom management
 
@@ -181,7 +265,7 @@ Supported built-in types and components:
 - [`canvas`](./canvas.md)
 - [`webview`](./webview.md)
 - [`overlay`](./overlay.md)
-- [`browser`](./browser.md)
+<!-- - [`browser`](./browser.md) -->
 - [`component`](./component.md)
 
 ```js
@@ -198,35 +282,48 @@ wom.load({
 
 _Alias: `wom.createElement(name, opts[, children])`_
 
-#### `wom.installComponent(path, name)`
+#### `wom.installComponent(path, name[, type])`
 Installs the specified component as available `wom` element type. After installing components they can be created directly with `wom.create`.
-
 * `path` String | Object 
   - Path of component descriptor file. Can point to `.js<x>` file directly or a `.json` file which is a description of the component. If points to a folder function will look for `component.json` file in it.
   - Component descriptor object or a component object (e.g. a required `.jsx` file)
 * `name` String - The name of the component to install
+* `type` String (optional) - Type of component. If it's `'internal'`, every Where can use installed component. Otherwise `wom.clear` will uninstall it. Default is `'where'` (non-internal)
 
-#### `wom.setConfig([cfg])`
-Appends the specified configuration object to `wom`'s current configuration (overwriting common properties). In order to take effect it should be called before `wom.start` or `wom.load`. Calling `wom.start` or `wom.load` later will use a merged configuration object where this configuration is taken as base and configuration passed to `wom.start` or `wom.load` is taken as extension (overwriting common properties).
-* `cfg` Object (optional) - Configuration object. Can contain the same properties as `wom.config`
+#### `wom.setAppConfig(config[, done])`
+Appends the specified configuration object to `wom`'s current `appConfig` (overwriting common properties) and applies it.
+* `config` Object - Application configuration to set (For property list see `wom.appConfig`)
+* `done` Function (optional) - Called when the configuration is set successfully.
 
-#### `wom.getConfig()`
-Returns Object - The current configuration object of `wom`. Can contain any property described in `wom.config`. By default it has the following native window attributes:
-  * `title` String
-  * `width` Number
-  * `height` Number
-  * `show` Boolean
-  * `displayMode` String
+#### `wom.resetAppConfig(config[, done])`
+Resets `appConfig` to its default state appended with the specified configuration and applies it.
+* `config` Object - Application configuration to set (For property list see `wom.appConfig`)
+* `done` Function (optional) - Called when the configuration is set successfully.
 
-### core resources
+#### `wom.setWhereConfig(config[, done])`
+Appends the specified configuration object to `wom`'s current `whereConfig` (overwriting common properties) and applies it.
+* `config` Object - Where configuration to set (For property list see `wom.whereConfig`)
+* `done` Function (optional) - Called when the configuration is set successfully.
 
-#### `wom.addResources(paths, base)`
+#### `wom.resetWhereConfig(config[, done])`
+Resets `whereConfig` to its default state appended with the specified configuration and applies it.
+* `config` Object - Where configuration to set (For property list see `wom.whereConfig`)
+* `done` Function (optional) - Called when the configuration is set successfully.
+
+### resource management
+
+#### `wom.addResources(paths[, base, done])`
 Adds folder paths to collection of resource containing paths. It creates and initializes a new resource group and append paths to that group. Any resource used by `wom` elements should be available in one of resource folders at the time of element creation (e.g. mesh and physical obj files)
-
 * `paths` String | String[] - Resource folder paths to add. They can be relative path or absolute path. If given with a single String it will be converted to String[].
-* `base` String - Base folder for relative paths if `paths` are defined relatively. Not used otherwise.
+* `base` String (optional) - Base folder for relative paths if `paths` are defined relatively. Not used otherwise.
+* `done` Function (optional) - Called after the resource group is initialized and populated successfully in maxwhere engine.
 
 Returns String - The random generated ID of the created resource group.
+
+#### `wom.removeResources([groupid, done])`
+Removes resource group and associated folder paths in maxwhere engine.
+* `groupid` String (optional) - ID of resource group to remove. If no group ID is specified every resource group is removed!
+* `done` Function (optional) - Called after the resource group is destroyed and every associated folder path is removed
 
 #### `wom.getAvailableMaterialNames()`
 Returns every material name which is available to use by `wom` elements.
@@ -234,7 +331,7 @@ Returns every material name which is available to use by `wom` elements.
 Returns Object - Key-Value Map of available material names. Keys are resource group names and values are material names belong to the group
   * `<resource group name>...` String - Material names in String[] contained by the resource group
 
-### core access
+### maxwhere engine access
 
 #### `wom.setFullScreen(enable)`
 Enables or disables native window's fullscreen mode.
@@ -245,7 +342,7 @@ Returns Boolean - Is native window in fullscreen mode currently.
 
 #### `wom.setDisplay(display)`
 Moves the native window to the center of specified display and resizes it to the size of the display.
-* `display` Object - Descriptor of display to move the native window to. Accepts electron `Display` object.
+* `display` [Display](https://electronjs.org/docs/api/structures/display) - Descriptor of display to move the native window to.
   * `bounds` Object - Position and size description of display
     * `width` Number
     * `height` Number
@@ -255,7 +352,7 @@ Moves the native window to the center of specified display and resizes it to the
 #### `wom.getDisplay()`
 Gets the current display of the native window. Matching display is calculated from native window's position and size
 
-Returns Object - The matching electron `Display` object
+Returns [Display](https://electronjs.org/docs/api/structures/display)
 
 #### `wom.setAmbient([color])`
 Sets the color of scene's ambient light 
@@ -305,6 +402,56 @@ Returns Object - The current skybox options of the scene. Containing the followi
 #### `wom.getCameraFov()`
 Returns Number - The vertical angle of `wom` camera's Field of View in degrees.
 
+#### `wom.setCameraFov(fovy)`
+Set vertical field of view angle
+* `fovy` Number - New field of view angle in degree
+
+#### `wom.getCameraLimits()`
+Return Object - the movement boundaries of 3d scene's camera
+  * `min` Object {x, y, z} - Left-bottom-far corner of bounding box.
+  * `max` Object {x, y, z} - Right-top-near corner of bounding box.
+
+#### `wom.setCameraLimits(limits)`
+Sets the movement boundaries of 3d scene's camera
+* `limits` Object - Limit of movement
+    * `min` Object {x, y, z} - Left-bottom-far corner of bounding box.
+    * `max` Object {x, y, z} - Right-top-near corner of bounding box.
+
+#### `wom.getCameraClipDistances()`
+Return Object - The clipping distances of 3d scene's camera. _Objects behind far clip distance or before near clip distance are not rendered_
+  * `near` Number - Near clip distance of camera.
+  * `far` Number - Far clip distance of camera.
+
+#### `wom.setCameraClipdistances(near, far)`
+Set clipping distances of 3d scene's camera. _Objects behind far clip distance or before near clip distance are not rendered_
+* `near` Number - Near clip distance of camera.
+* `far` Number - Far clip distance of camera.
+
+#### `wom.getPhysicalLimits()`
+Returns Object - Physical limits for 3d objects of the scene. _Effects object with attached physical hitshape only_
+  * `x` Object - Physical boundaries along `x` axis.
+    * `min` Number
+    * `max` Number
+  * `y` Object - Physical boundaries along `y` axis.
+    * `min` Number
+    * `max` Number
+  * `z` Object - Physical boundaries along `z` axis.
+    * `min` Number
+    * `max` Number
+
+#### `wom.setPhysicalLimits(limits)`
+Set phyiscal limits for 3d objects of the scene. _Effects object with attached physical hitshape only_
+* `limits` Object
+  * `x` Object - Physical boundaries along `x` axis.
+    * `min` Number
+    * `max` Number
+  * `y` Object - Physical boundaries along `y` axis.
+    * `min` Number
+    * `max` Number
+  * `z` Object - Physical boundaries along `z` axis.
+    * `min` Number
+    * `max` Number
+
 #### `wom.setSpatialControl(enable)`
 Enables or disables spatial control in maxwhere. Mouse movement behavior and visiblity of 2D mouse cursor and 3D crosshair (if enabled) changes according to the spatial control state. Camera is not manipulated in 2D cursor mode (set `false`) but mouse events are sent to navigation controller in 3D crosshair mode (set `true` - Coginav rotates the camera).
 * `enable` Boolean - Enable or disable spatial control in maxwhere.
@@ -320,6 +467,10 @@ Overlay manipulation  |  :x:  |  :white_check_mark:  |
 Gets the current state of spatial control. 2D cursor mode returns `false` while 3D crosshair mode returns `true`
 
 Returns Boolean - Is spatial control enabled.
+
+#### `wom.holdSpatialControl(hold)`
+Holds the spatial control of 3d scene. Disable/enable **every** input event propagation in the maxwhere engine.
+* `hold` Boolean - Enable or disable spatial control
 
 #### `wom.setCursor(type[, data, w, h, x, y, scale])`
 Sets the mouse cursor style in maxwhere. Final look depends on OS iconset.
@@ -344,10 +495,28 @@ Shows the native window.
 #### `wom.hideWindow()`
 Hides the native window.
 
+#### `wom.isWindowVisible()`
+Returns Boolean - whether the native window is visible
+
 #### `wom.getWindowSize()`
-Returns Object - The current size of native window.
+Returns Object - The current size of native window. _Window size is in raw pixels, which is multiplied with pixel scale factor_
   * `width` Number
   * `height` Number
+
+#### `wom.setWindowSize(width, height)`
+Sets the size of native window. _Window size should be in raw pixels, which is multiplied with pixel scale factor_
+* `width` Number - Width of window in pixels
+* `height` Number - Height of window in pixels
+
+#### `wom.getWindowPixelScaleFactor()`
+Return the native window's pixel scale factor. _Factor is automatically adjusted when the window is moved or changed display. See 'dpi-changed' event_
+
+#### `wom.getWindowTitle()`
+Returns String - the current title of the native window
+
+#### `wom.setWindowTitle(title)`
+Sets the title of native window
+* `title` String
 
 #### `wom.maximize()`
 Maximizes the native window
@@ -365,7 +534,22 @@ Enables or disables mouse input grab on native window. When mouse is grabbed by 
 #### `wom.isInputGrabbed()`
 Returns Boolean - Is mouse input grabbed by native window.
 
-### component
+#### `wom.setWorldRendering(render)`
+Sets whether the 3d scene should be rendered or not. _Overlays are keep rendered even when 3d scene is not_
+* `render` Boolean - Enable or disable 3d rendering
+
+#### `wom.isWorldRendering()`
+Returns Boolean - Whether the 3d scene is rendering. _Overlays are keep rendered even when 3d scene is not_
+
+#### `wom.setCurrentSession(sessionName)`
+Sets the current session of `wom`. _Sessions are used for managing browser local data_
+* `sessionName` String - Name of session to use.
+
+#### `getCurrentSession()`
+Returns [`Session`](https://electronjs.org/docs/api/session#class-session) - The currently used session of `wom`.
+
+<!--  Use installComponent instead -->
+<!-- ### component
 
 #### `wom.Component(path)`
 Creates a builder function of a new component from the provided descriptor file.
@@ -375,13 +559,12 @@ Returns Function - The builder function for a new `wom` component. It creates ne
   * `opts` any - Containing initializer parameters passed to created component's `init` function
   * `c` `Component` - The created `wom` component
 
-<!-- ```js
+```js
 example required
 ```
 -->
-
-## Core event listeners
-Listeners can be registered both for `wom`'s own event types and for events emitted from 3d scene by the core. `wom`'s own events are described in `Events` section, while 3d events are listed in listener functions specifically.
+## Maxwhere engine event listeners
+Listeners can be registered both for `wom`'s own event types and for events emitted from 3d scene by the engine. `wom`'s own events are described in `Events` section, while 3d events are listed in listener functions specifically.
 
 #### `wom.on(eventName, handler)`
 Registers an event listener. Handler function will be called every time when the specified event is fired in maxwhere engine or `wom`.
@@ -481,7 +664,8 @@ Registers an event listener. Handler function will be called every time when the
     * `render-fullscreen`
     * `render-maximize`
     * `render-displayposition`
-    * `render-windowvisible`
+    * `render-window-show`
+    * `render-window-hide`
     * `render-window-enter`
     * `render-window-leave`
     * `render-cursor`
@@ -561,7 +745,7 @@ Registers an event listener. Handler function will be called for the first time 
 * `eventName` Object | String - Identical to `wom.on`
 * `handler` Function - Identical to `wom.on`
 
-### `wom.removeListener(eventName, handler)`
+#### `wom.removeListener(eventName, handler)`
 Unregisters an event listener for the specified event. Handler function should be identical to the one which used to register the listener. That is it's not enough to have the same function body they should be the same javascript object. _Consequently equivalent lambdas are not accepted_
 * `eventName` Object | String - Identical to `wom.on`
 * `handler` Function - Identical to `wom.on`

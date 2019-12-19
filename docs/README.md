@@ -35,7 +35,8 @@ $ npm i -g @mxw/sdk
 ### Components
 
 - [component](api/component.md)
-- [browser](api/browser.md)
+- [webtable](api/webtable.md)
+- [billboard](api/billboard.md)
 
 ## Examples
 

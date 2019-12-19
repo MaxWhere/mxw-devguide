@@ -13,33 +13,41 @@ To create and insert `Canvas` into `wom` tree use `wom.create('canvas', [options
   * `resolution-width` Number (optional) - The resolution width of the `Canvas`'s texture in pixels (Integer). Default is `1280`.
   * `resolution-height` Number (optional) - The resolution height of the `Canvas`'s texture in pixels (Integer). Default is `720`.
   * `transparent` Boolean (optional) - Whether the `Canvas` is transparent. _Alpha channel of texture's pixel color is used for transparency values._ Default is `true`.
-  * `zOrder` Number (optional) - Z order of `overlay` type `Canvas` (Integer). _Overlay with greater Z order covers overlays with less Z order._ Default is `0`.
+  * `zOrder` Number (optional) - Z order of `overlay` type `Canvas` (Integer). _Overlay with greater Z order covers overlays with less Z order._ Default is `1`.
   * `metrics` String (optional) - Determines the metrics used for `left` and `top` for `overlay` type `Canvas`. Possible values are `pixels` (default), `relative`
-  * `left` Number (optional) - In `overlay` location the offset from the left of the window. Default is `0`.
-  * `top` Number (optional) - In `overlay` location the offset from the top of the window. Default is `0`.
+  * `left` Number (optional) - For `overlay` type, the offset from the left of the window. Default is `0`.
+  * `top` Number (optional) - For `overlay` type, the offset from the top of the window. Default is `0`.
   * `horizontal-align` String (optional) - Determines how to align the `overlay` type `Canvas` horizontally. _`left`'s `0` point depends on this alignment._ Possible values are `left` (default), `center`, `right`.
   * `vertical-align` String (optional) - Determines how to align the `overlay` type `Canvas` vertically. _`top`'s `0` point depends on this alignment._ Possible values are `top` (default), `center`, `bottom`
-  * `disableIngamePhysical` Boolean (optional) - Determines whether `Canvas` registers `canvas` type physical shape matching `Canvas`'s dimensions when created. If `true` physical shape is not registered. Default is `false`
+  * `disableIngamePhysical` Boolean (optional) - Determines whether `Canvas` registers `canvas` type physical shape matching `Canvas`'s dimensions when created. If `true` physical shape is not registered (always `true` for `overlay`). Default is `false`.
 
-_`options` are superset of `Node` constructor's options! Only `Canvas` specific properties are listed here. For the rest see `new Node([options])` documentation_
+_`options` are superset of `Node` constructor's options! Only `Canvas` specific properties are listed here. For the rest see [`new Node([options])`](node.md#new-nodeoptions) documentation_
 
-```js
-  let cig = wom.create('canvas', {
-    location: 'in-game',
-    width: 40,
-    height: 40,
-    'resolution-width': 400,
-    'resolution-height': 400,
-    position: {x: -50, y: 0, z: -100},
-    done: c => {
-      c.loadPicture('logo.png')
-    }
-  })
-  wom.render(cig)
+```jsx
+// 110x70 ocerlay logo in the bottom right corner of the screen
+wom.render(
+  <canvas
+    id='logo'
+    location='overlay'
+    width={110}
+    height={70}
+    top={-80}
+    left={-120}
+    resolution-width={110}
+    resolution-height={70}
+    vertical-align='bottom'
+    horizontal-align='right'
+    metrics='pixels'
+  />
+)
 ```
 
 ## Instance Events
 See `Node` instance events for inherited events.
+
+#### `'canvas-new-size'`
+
+Reports that the size of canvas has been changed. Emitted in `setSize`
 
 ## Instance Properties
 See `Node` instance properties for inherited properties.
@@ -109,7 +117,7 @@ Sets the location type of `Canvas`. Moves `Canvas` between display overlay and 3
 * `location` String - Location type to set. Possible values are `in-game`, `overlay`.
 
 #### `Canvas.loadPicture(path)`
-Loads the specified picture into texture of `Canvas`.
+Loads the specified picture into texture of `Canvas`. _Transparent images should use premultiplied aplha channel_
 * `path` String - Path to image file to render.
 
 #### `Canvas.setPassive(passive)`
@@ -123,3 +131,20 @@ Sets the bitmap buffer of the underlying texture of `Canvas`.
 * `damageRect` Object - The area where the buffer data should be set {x, y, width, height}.
 * `buffer` Object - Bitmap to apply. A `node::Buffer` holding 32 bit ARGB data.
 * `bufferSize` Object - The size of `buffer` in pixels {width, height}.
+
+Example of feeding offscreen Electron webcontent into `Canvas`
+```js
+browserWindow.webContents.on('paint', (event, rect, data) => {
+  canvas.setBuffer(rect, data.getBitmap(), data.getSize())
+})
+```
+
+#### `Canvas.isTextureFiltered()`
+
+Return whether any filtering is applied on the Ogre texture
+
+#### `Canvas.setTextureFiltering(enable)`
+
+Sets texture filtering of Ogre texture. It's enabled by default.
+
+_Texture filtering can smoothen sharp edges in 3d scene, while disabling it can result crispy look for pixel precise overlays_

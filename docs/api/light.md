@@ -14,19 +14,28 @@ To create and insert `Light` into `wom` tree use `wom.create('light', [options])
   * `specular` Object (optional) - The specular color of the light {r, g, b, a}. Default is `{r: 1.0, g: 1.0, b: 1.0, a: 1.0}`.
   * `range` Object (optional) - The range parameters of the light source {inner_angle: Number (Degree), outer_angle: Number (Degree), falloff: Number}. Default is `{inner_angle: 35, outer_angle: 70, falloff: 1}`.
   * `attenuation` Object (optional) - The attenuation coefficients of the light
-    source {range: Number, constant: Number (range [0, 1])}. Default is `{range: 5000, constant: 1}`.
-  * `direction` Object (optional) - The 3D vector towards the light will point {x, y, z}. Default is `{x: 0.0, y: -1.0, z: 0.0}`.
+    source {range, constant, linear, quadratic}, where properties are positive Numbers (constant is in range [0, 1]). Default is `{range: 5000, constant: 1, linear: 0.0009, quadratic: 0.000003}`, .
+  * `direction` Object (optional) - The 3D vector towards the light will point {x, y, z}. Default is `{x: 0, y: -1, z: 0}`.
 
-_`options` are superset of `Node` constructor's options! Only `Light` specific properties are listed here. For the rest see `new Node([options])` documentation_
+_`options` are superset of `Node` constructor's options! Only `Light` specific properties are listed here. For the rest see [`new Node([options])`](node.md#new-nodeoptions) documentation_
 
-```js
-  let l = wom.create('light', {
-    position: {x: 0, y: 300, z: -200},
-    diffuse: {r: 1, g: 0, b: 0},
-    lighttype: 'directional',
-    direction: {x: 0, y: 1, z: -1}
-  })
-  wom.render(l)
+```jsx
+wom.render(
+  <light
+    y={100}
+    done={ l => {
+      l.animate('diffuse', {
+        from: [{r: 1, g: 1, b: 1}, {r: 1, g: 1, b: 1}, {r: 1, g: 1, b: 1}],
+        to: [{r: 1, g: 0, b: 0}, {r: 0, g: 1, b: 0}, {r: 0, g: 0, b: 1}],
+        repeat: true // every step starts from white color
+      })
+      l.animate('specular', {
+        to: {r: 1, g: 1, b: 0},
+        loop: true // to yellow and back
+      })
+    }}
+  />
+)
 ```
 
 ## Instance Events

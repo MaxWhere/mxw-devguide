@@ -8,7 +8,7 @@
 To create and insert `Webview` into `wom` tree use `wom.create('overlay', [options])`!
 * `options` Object (optional) - Contains the same properties as `Webview` constructor's options. See `Webview` documentation for details.
 
-_`options` are superset of `Canvas` constructor's options (and `Node`'s as well)! Only `Webview` specific properties are listed here. For the rest see `new Canvas([options])` and `new Node([options])` documentation_
+_`options` are superset of `Canvas` constructor's options (and `Node`'s as well)! Only `Webview` specific properties are listed here. For the rest see [`new Canvas([options])`](canvas.md#new-canvasoptions) and [`new Node([options])`](node.md#new-nodeoptions) documentation_
 
 ## Instance Events
 See `Webview` instance events for inherited events.
@@ -37,9 +37,3 @@ process.once('foo-ready', () => {
 
 #### `Overlay.isShown()` (overrides `Node.isShown()`)
 Returns Boolean - Is overlay of this `Overlay` visible. _Contrary to `Node` method it queries the `canvas` type entity instead of base node._
-
-#### `Overlay.show()` (overrides `Node.show()`)
-Shows the overlay of this `Overlay` on the display. `BrowserWindow` starts painting. _Contrary to `Node` method it manipulates the `canvas` type entity instead of base node._
-
-#### `Overlay.hide()` (overrides `Node.hide()`)
-Hides the overlay of this `Overlay` on the display. `BrowserWindow` stops painting. _Contrary to `Node` method it manipulates the `canvas` type entity instead of base node._
