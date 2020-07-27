@@ -10,7 +10,7 @@ This project serves as a showcase, documentation and a getting started tutorial 
 
 ## Usage
 - Install dependencies by typing `$ npm i` in the command line from the project folder.
-- Download resources from [here](https://nas.mistems.hu:5001/sharing/rDq4HMB1b) and unzip it into the `static/scene` folder
+- Download resources from [here](https://nas.mistems.hu:7039/sharing/rDq4HMB1b) and unzip it into the `static/scene` folder
 - To run the app, type `$ maxwhere run app.js` in the command line from the project folder.
 
 ## SDK Documenation
